@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../navigation/app_routes.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_drawer.dart';
 
 /// PANTALLA 2: MENU
 /// Es el centro de navegacion: desde aqui se llega a Registrar Alumnos,
@@ -10,49 +11,13 @@ import '../theme/app_theme.dart';
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
 
-  /// LOGOUT: pregunta confirmacion y, si acepta, vuelve al Login.
-  Future<void> _cerrarSesion(BuildContext context) async {
-    // showDialog muestra una ventana emergente y espera (await) la respuesta:
-    // devuelve true si el usuario presiono "Cerrar sesión", false/null si cancelo.
-    final confirmar = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Cerrar sesión'),
-        content: const Text('¿Seguro que deseas salir de la aplicación?'),
-        actions: [
-          TextButton(
-            // Navigator.pop(contexto, valor) cierra el dialogo y devuelve "valor".
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Cerrar sesión'),
-          ),
-        ],
-      ),
-    );
-
-    // Despues de un await hay que comprobar que la pantalla siga viva
-    // (context.mounted) antes de usar el context otra vez.
-    if (confirmar == true && context.mounted) {
-      // NAVEGACION: pushNamedAndRemoveUntil va al login y BORRA toda la pila
-      // de pantallas anteriores (el "(ruta) => false" significa "no conserves ninguna").
-      // Asi, tras el logout, el boton "atras" no regresa al menu.
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.login,
-        (ruta) => false,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Panel lateral: al tener `drawer`, el AppBar muestra solo el icono de
+      // hamburguesa (tres rayas) y al tocarlo se desliza el panel desde la izquierda.
+      drawer: const AppDrawer(),
       appBar: AppBar(
-        // Icono de hamburguesa decorativo, igual que en el mockup.
-        leading: const Icon(Icons.menu),
         title: const Text('Menú'),
       ),
       body: ListView(
@@ -81,7 +46,8 @@ class MenuScreen extends StatelessWidget {
             icono: Icons.logout,
             titulo: 'Logout',
             colorIcono: AppColors.desaprobado,
-            onTap: () => _cerrarSesion(context),
+            // cerrarSesion (en app_drawer.dart) pregunta confirmacion y vuelve al Login.
+            onTap: () => cerrarSesion(context),
           ),
         ],
       ),

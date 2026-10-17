@@ -4,6 +4,7 @@ import '../models/alumno.dart';
 import '../navigation/app_routes.dart';
 import '../services/alumno_repository.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_drawer.dart';
 import '../widgets/avatar_circular.dart';
 
 /// PANTALLA 3: LISTAR ALUMNOS
@@ -29,12 +30,10 @@ class _ListarAlumnosScreenState extends State<ListarAlumnosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Panel lateral: el AppBar muestra el icono de hamburguesa (tres rayas)
+      // y al tocarlo se abre el panel con las opciones de la app.
+      drawer: const AppDrawer(),
       appBar: AppBar(
-        // Hamburguesa: vuelve al menu (pop = quitar esta pantalla de la pila).
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text('Alumnos'),
         actions: [
           // Boton "+": abre la pantalla Registrar Alumno.

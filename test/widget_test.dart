@@ -26,10 +26,7 @@ void main() {
     expect(find.text('Ingresa tu email'), findsOneWidget);
 
     // Con datos validos pasa al menu.
-    await tester.enterText(find.byType(EditableText).at(0), 'maria@correo.com');
-    await tester.enterText(find.byType(EditableText).at(1), '1234');
-    await tester.tap(find.text('LOGIN'));
-    await tester.pumpAndSettle();
+    await iniciarSesion(tester);
     expect(find.text('Menú'), findsOneWidget);
 
     // 2. MENU -> 4. REGISTRAR ALUMNO
@@ -54,13 +51,63 @@ void main() {
     expect(find.text('Ana Torres'), findsOneWidget);
     expect(find.text('Rosa Vega'), findsNothing);
 
-    // Regresa al menu y hace LOGOUT.
+    // Las tres rayas abren el panel lateral; "Menú" regresa a la pantalla principal.
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pumpAndSettle();
+    await tester.tap(enDrawer('Menú'));
+    await tester.pumpAndSettle();
+    expect(find.text('Menú'), findsOneWidget);
+
+    // LOGOUT desde el menu, con confirmacion.
     await tester.tap(find.text('Logout'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Cerrar sesión').last);
     await tester.pumpAndSettle();
     expect(find.text('Iniciar Sesión'), findsOneWidget);
   });
+
+  testWidgets('panel lateral: las tres rayas abren el drawer y navegan',
+      (tester) async {
+    await tester.pumpWidget(const AlumnosApp());
+    await iniciarSesion(tester);
+
+    // Cerrado, el drawer no esta en pantalla.
+    expect(find.byType(Drawer), findsNothing);
+
+    // Las tres rayas del menu abren el panel con el usuario y las opciones.
+    await tester.tap(find.byIcon(Icons.menu));
+    await tester.pumpAndSettle();
+    expect(find.byType(Drawer), findsOneWidget);
+    expect(enDrawer('María González'), findsOneWidget);
+
+    // Navega al perfil y el panel se cierra.
+    await tester.tap(enDrawer('Perfil'));
+    await tester.pumpAndSettle();
+    expect(find.text('EDITAR PERFIL'), findsOneWidget);
+    expect(find.byType(Drawer), findsNothing);
+
+    // Vuelve atras al menu y logout desde el panel (con confirmacion).
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.menu));
+    await tester.pumpAndSettle();
+    await tester.tap(enDrawer('Logout'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cerrar sesión').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Iniciar Sesión'), findsOneWidget);
+  });
 }
+
+/// Escribe credenciales validas y entra al menu.
+Future<void> iniciarSesion(WidgetTester tester) async {
+  await tester.enterText(find.byType(EditableText).at(0), 'maria@correo.com');
+  await tester.enterText(find.byType(EditableText).at(1), '1234');
+  await tester.tap(find.text('LOGIN'));
+  await tester.pumpAndSettle();
+}
+
+/// Busca un texto SOLO dentro del panel lateral: el menu y el drawer repiten
+/// opciones ("Perfil", "Logout"), asi que hay que distinguirlos.
+Finder enDrawer(String texto) =>
+    find.descendant(of: find.byType(Drawer), matching: find.text(texto));

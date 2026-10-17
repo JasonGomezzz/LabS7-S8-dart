@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/listar_alumnos_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/menu_screen.dart';
+import '../screens/perfil_screen.dart';
 import '../screens/registrar_alumno_screen.dart';
 
 /// Nombres de las rutas (pantallas) de la app.
@@ -23,5 +24,6 @@ class AppRoutes {
         menu: (_) => const MenuScreen(),
         alumnos: (_) => const ListarAlumnosScreen(),
         registrar: (_) => const RegistrarAlumnoScreen(),
+        perfil: (_) => const PerfilScreen(),
       };
 }

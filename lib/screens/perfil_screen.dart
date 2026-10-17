@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/usuario.dart';
+import '../services/sesion.dart';
 import '../theme/app_theme.dart';
 import '../widgets/avatar_circular.dart';
 
@@ -9,15 +9,6 @@ import '../widgets/avatar_circular.dart';
 /// telefono y rol. No tiene estado propio (solo muestra datos), por eso es Stateless.
 class PerfilScreen extends StatelessWidget {
   const PerfilScreen({super.key});
-
-  // Datos de ejemplo (mock) del docente. En una app real vendrian del
-  // backend o de la sesion guardada al hacer login.
-  static const _usuario = Usuario(
-    nombre: 'María González',
-    email: 'maria.gonzalez@correo.com',
-    telefono: '912345678',
-    rol: 'Docente',
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -62,22 +53,22 @@ class PerfilScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                _usuario.nombre,
+                Sesion.usuarioActual.nombre,
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 2),
               Text(
-                _usuario.email,
+                Sesion.usuarioActual.email,
                 style: const TextStyle(color: AppColors.textoSecundario),
               ),
               const SizedBox(height: 20),
               const Divider(),
 
               // Filas de datos: icono + etiqueta a la izquierda, valor a la derecha.
-              _FilaDato(icono: Icons.person, etiqueta: 'Nombre', valor: _usuario.nombre),
-              _FilaDato(icono: Icons.email, etiqueta: 'Email', valor: _usuario.email),
-              _FilaDato(icono: Icons.phone, etiqueta: 'Teléfono', valor: _usuario.telefono),
-              _FilaDato(icono: Icons.settings, etiqueta: 'Roles', valor: _usuario.rol),
+              _FilaDato(icono: Icons.person, etiqueta: 'Nombre', valor: Sesion.usuarioActual.nombre),
+              _FilaDato(icono: Icons.email, etiqueta: 'Email', valor: Sesion.usuarioActual.email),
+              _FilaDato(icono: Icons.phone, etiqueta: 'Teléfono', valor: Sesion.usuarioActual.telefono),
+              _FilaDato(icono: Icons.settings, etiqueta: 'Roles', valor: Sesion.usuarioActual.rol),
               const SizedBox(height: 20),
 
               // Boton con borde (OutlinedButton, estilo en AppTheme).

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../screens/login_screen.dart';
+import '../screens/menu_screen.dart';
 
 /// Nombres de las rutas (pantallas) de la app.
 /// Se usan como constantes para evitar errores de tipeo: en vez de escribir
@@ -17,5 +18,6 @@ class AppRoutes {
   /// se llama a Navigator.pushNamed(context, nombreDeRuta).
   static Map<String, WidgetBuilder> get tabla => {
         login: (_) => const LoginScreen(),
+        menu: (_) => const MenuScreen(),
       };
 }

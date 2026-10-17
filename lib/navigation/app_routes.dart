@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/listar_alumnos_screen.dart';
 import '../screens/login_screen.dart';
 import '../screens/menu_screen.dart';
 
@@ -19,5 +20,6 @@ class AppRoutes {
   static Map<String, WidgetBuilder> get tabla => {
         login: (_) => const LoginScreen(),
         menu: (_) => const MenuScreen(),
+        alumnos: (_) => const ListarAlumnosScreen(),
       };
 }
